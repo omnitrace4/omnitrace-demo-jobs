@@ -1,0 +1,27 @@
+{
+  "policies": [
+    {
+      "name": "etl-standard",
+      "description": "Standard ETL cluster policy — auto-termination enforced, spot instances, tagged",
+      "definition": {
+        "autotermination_minutes": { "type": "range", "minValue": 10, "maxValue": 60, "defaultValue": 30 },
+        "node_type_id": { "type": "allowlist", "values": ["i3.xlarge", "i3.2xlarge", "m5.xlarge", "m5.2xlarge"] },
+        "num_workers": { "type": "range", "minValue": 1, "maxValue": 8, "defaultValue": 2 },
+        "spark_version": { "type": "regex", "pattern": "1[4-5]\\.[0-9]+\\.x-scala2\\.12" },
+        "custom_tags.env": { "type": "fixed", "value": "prod" },
+        "custom_tags.team": { "type": "regex", "pattern": ".+" }
+      }
+    },
+    {
+      "name": "dev-interactive",
+      "description": "Developer interactive cluster — small, short-lived, single user",
+      "definition": {
+        "autotermination_minutes": { "type": "range", "minValue": 10, "maxValue": 30, "defaultValue": 15 },
+        "node_type_id": { "type": "allowlist", "values": ["m5.large", "m5.xlarge"] },
+        "num_workers": { "type": "range", "minValue": 0, "maxValue": 2, "defaultValue": 0 },
+        "data_security_mode": { "type": "fixed", "value": "SINGLE_USER" },
+        "custom_tags.env": { "type": "fixed", "value": "dev" }
+      }
+    }
+  ]
+}
