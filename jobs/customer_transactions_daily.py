@@ -18,6 +18,12 @@ import sys
 def main():
     spark = SparkSession.builder.appName("customer_transactions_daily").getOrCreate()
 
+    # Omnitrace remediation OT-R-J6AB3YR8: SHUFFLE_PARTITIONS_TOO_LOW (requested by dhana)
+    spark.conf.set("spark.sql.adaptive.enabled", "true")
+    spark.conf.set("spark.sql.shuffle.partitions", "auto")
+    spark.conf.set("spark.databricks.optimizer.adaptive.enabled", "true")
+    spark.conf.set("spark.sql.adaptive.coalescePartitions.enabled", "true")
+
     # Configuration
     catalog = "omnitrace"
     target_table = f"{catalog}.analytics.customer_transactions"
